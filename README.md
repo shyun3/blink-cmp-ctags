@@ -4,8 +4,9 @@ Adds support for ctags to [Saghen/blink.cmp](https://github.com/Saghen/blink.cmp
 
 ## Installation
 Add your tag files to vim
-`vim.opt.tags:append(".git/tags", "tags")`
-
+```lua
+vim.opt.tags:append(".git/tags", "tags")
+```
 Add provider in `lazy.nvim`
 ```lua
 {
