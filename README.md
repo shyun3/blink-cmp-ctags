@@ -16,13 +16,13 @@ Add provider in `lazy.nvim`
     },
     opts = {
         sources = {
-            providers = {
-                {
-                    { "blink-cmp-ctags" },
-                    { "blink.cmp.sources.buffer" },
-                    { "blink.cmp.sources.path" },
-                },
-            },
+				providers = {
+					{ "blink.cmp.sources.lsp", name = "LSP" },
+					{ "blink.cmp.sources.path", name = "Path", score_offset = 3 },
+					{ "blink.cmp.sources.snippets", name = "Snippets", score_offset = -3 },
+					{ "blink.cmp.sources.buffer", name = "Buffer", fallback_for = { "LSP" } },
+					{ "blink-cmp-ctags", name = "Ctags", fallback_for = { "LSP" } },
+				},
         },
     },
 },
