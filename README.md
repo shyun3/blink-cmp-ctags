@@ -46,10 +46,19 @@ opts = {
                 name = "Ctags",
                 fallback_for = { "LSP" },
                 opts = {
-                    tag_files = vim.fn.tagfiles(), -- List of tag files
+                    -- List of tag files
+                    tag_files = vim.fn.tagfiles(),
+
+                    -- Turn tagfile caching on or off
                     cache = true,
-                    include_kinds = { "f", "v", "c", "m", "t" }, -- Tag kinds to include
-                    max_items = 500, -- Maximum number of completion items to return (Be careful with this, higher numbers tend to crash blink.cmp when you have very large tag files)
+
+                    -- Tag kinds to include
+                    include_kinds = { "f", "v", "c", "m", "t" },
+
+                    -- Maximum number of completion items to return (Be careful
+                    -- with this, higher numbers tend to crash blink.cmp when you
+                    -- have very large tag files)
+                    max_items = 500,
                 }
             },
         },
