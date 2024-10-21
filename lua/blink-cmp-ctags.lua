@@ -112,12 +112,11 @@ function ctags:_load_tagfile_async(tagfile)
 				end
 
 				uv.fs_read(fd, stat.size, 0, function(err_read, data)
+					uv.fs_close(fd)
 					if err_read then
-						uv.fs_close(fd)
 						return reject("Error reading file: " .. tagfile .. " Error: " .. err_read)
 					end
 
-					uv.fs_close(fd)
 					local lines = vim.split(data, "\n")
 					local items = {}
 					local seen = {}
@@ -156,7 +155,7 @@ end
 
 -- Get the file extension from a file path
 function ctags:_get_file_extension(filepath)
-	local extension = filepath:match("^.+(%.[%a]+)$")
+	local extension = filepath:match("^.+(%.[%a%d]+)$")
 	if not extension then
 		debug_print("Could not extract extension from path: " .. filepath)
 		return nil
@@ -199,7 +198,7 @@ function ctags:_parse_line(line)
 end
 
 -- Get completions based on the current word prefix and cached items
-function ctags:get_completions(_, callback)
+function ctags:get_completions(context, callback)
 	if self.loading then
 		debug_print("Cache is still loading. Returning empty completions.")
 		callback({ is_incomplete_forward = true, is_incomplete_backward = true, items = {} })
@@ -214,7 +213,7 @@ function ctags:get_completions(_, callback)
 		return function() end
 	end
 
-	local prefix = self:_get_current_word_prefix()
+	local prefix = context.line:sub(context.bounds.start_col, context.bounds.end_col)
 
 	if prefix == "" then
 		debug_print("Empty prefix. Returning no completions.")
@@ -260,14 +259,6 @@ function ctags:get_completions(_, callback)
 	})
 
 	return function() end
-end
-
--- Retrieve the current word prefix under the cursor
-function ctags:_get_current_word_prefix()
-	local _, col = unpack(api.nvim_win_get_cursor(0))
-	local line = api.nvim_get_current_line()
-	local prefix = line:sub(1, col):match("[%w_]+$") or ""
-	return prefix
 end
 
 return ctags
