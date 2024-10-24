@@ -23,11 +23,16 @@ Add provider in `lazy.nvim`
     opts = {
         sources = {
             providers = {
-                { "blink.cmp.sources.lsp", name = "LSP" },
-                { "blink.cmp.sources.path", name = "Path", score_offset = 3 },
-                { "blink.cmp.sources.snippets", name = "Snippets", score_offset = -3 },
-                { "blink.cmp.sources.buffer", name = "Buffer", fallback_for = { "LSP" } },
-                { "blink-cmp-ctags", name = "Ctags", fallback_for = { "LSP" } },
+                -- Add the ctags provider
+                ctags = {
+                    name = "Ctags",
+                    module = "blink-cmp-ctags",
+                    fallback_for = { "lsp" },
+                },
+            },
+            completion = {
+                -- Add ctags to the list
+                enabled_providers = { "lsp", "path", "snippets", "buffer", "ctags" },
             },
         },
     },
@@ -37,31 +42,22 @@ Add provider in `lazy.nvim`
 (Optional) Change default options
 
 ```lua
-opts = {
-    sources = {
-        providers = {
-            [ ... ] -- Other providers.
-            {
-                "blink-cmp-ctags",
-                name = "Ctags",
-                fallback_for = { "LSP" },
-                opts = {
-                    -- List of tag files
-                    tag_files = vim.fn.tagfiles(),
+ctags = {
+    name = "Ctags",
+    module = "blink-cmp-ctags",
+    fallback_for = { "lsp" },
+    opts = {
+        -- List of tag files
+        tag_files = vim.fn.tagfiles(),
 
-                    -- Turn tagfile caching on or off
-                    cache = true,
+        -- Turn tagfile caching on or off
+        cache = true,
 
-                    -- Tag kinds to include
-                    include_kinds = { "f", "v", "c", "m", "t" },
+        -- Tag kinds to include
+        include_kinds = { "f", "v", "c", "m", "t" },
 
-                    -- Maximum number of completion items to return (Be careful
-                    -- with this, higher numbers tend to crash blink.cmp when you
-                    -- have very large tag files)
-                    max_items = 500,
-                }
-            },
-        },
-    },
+        -- Maximum number of completion items to return
+        max_items = 500,
+    }
 },
 ```
