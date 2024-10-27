@@ -9,7 +9,7 @@ Installation
 Add your tag files to vim
 
 ```lua
-vim.opt.tags:append(".git/tags", "tags")
+vim.opt.tags:append({ ".git/tags", "tags" })
 ```
 
 Add provider in `lazy.nvim`

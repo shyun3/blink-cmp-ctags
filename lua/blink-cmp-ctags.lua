@@ -54,6 +54,8 @@ end
 
 -- Asynchronously load all tag files
 function ctags:_load_tags_async()
+	debug_print(string.format("Preparing to load %d tags files", vim.tbl_count(self.config.tag_files)))
+
 	local tasks = vim.tbl_map(function(tagfile)
 		return self:_load_tagfile_async(tagfile)
 	end, self.config.tag_files)
