@@ -1,3 +1,6 @@
+> This project is now deprecated.  
+> Please use [ctags-lsp.nvim](https://github.com/netmute/ctags-lsp.nvim) instead. It is easier to use and has more features.
+
 blink-cmp-ctags
 ===============
 
