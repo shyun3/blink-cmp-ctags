@@ -210,7 +210,7 @@ function ctags:get_completions(context, callback)
 	local seen = {}
 
 	local success, regex = pcall(function()
-		return vim.regex("^" .. vim.pesc(prefix))
+		return vim.regex("^" .. vim.pesc(prefix) .. "\\c")
 	end)
 
 	if not success then
