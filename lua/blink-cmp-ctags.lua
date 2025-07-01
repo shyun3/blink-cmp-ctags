@@ -10,17 +10,7 @@ local ctags = {}
 local default_config = {
 	tag_files = vim.fn.tagfiles(), -- List of tag files
 	cache = true,
-	include_kinds = { "f", "v", "c", "m", "t" }, -- Tag kinds to include
 	max_items = 500, -- Maximum number of completion items to return
-}
-
--- Mapping of tag kinds to LSP completion kinds
-local tag_kinds_map = {
-	f = lsp.CompletionItemKind.Function,
-	v = lsp.CompletionItemKind.Variable,
-	c = lsp.CompletionItemKind.Class,
-	m = lsp.CompletionItemKind.Method,
-	t = lsp.CompletionItemKind.Struct,
 }
 
 -- Debugging Utility
@@ -175,15 +165,9 @@ function ctags:_parse_line(line)
 
 	local name, file, tag, kind = fields[1], fields[2], fields[3], fields[4]
 
-	if not vim.tbl_contains(self.config.include_kinds, kind) then
-		return nil
-	end
-
-	local lsp_kind = tag_kinds_map[kind] or lsp.CompletionItemKind.Text
-
 	return {
 		label = name,
-		kind = lsp_kind,
+		kind = lsp.CompletionItemKind.Text,
 		insertText = name,
 		documentation = {
 			kind = "markdown",

@@ -48,9 +48,6 @@ ctags = {
         -- Turn tagfile caching on or off
         cache = true,
 
-        -- Tag kinds to include
-        include_kinds = { "f", "v", "c", "m", "t" },
-
         -- Maximum number of completion items to return
         max_items = 500,
     }
