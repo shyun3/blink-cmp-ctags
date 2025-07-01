@@ -1,5 +1,5 @@
-> This project is now deprecated.  
-> Please use [ctags-lsp.nvim](https://github.com/netmute/ctags-lsp.nvim) instead. It is easier to use and has more features.
+> This has been forked from a deprecated project.
+> The official replacement now is [ctags-lsp.nvim](https://github.com/netmute/ctags-lsp.nvim).
 
 blink-cmp-ctags
 ===============
@@ -8,12 +8,6 @@ Adds support for ctags to [Saghen/blink.cmp](https://github.com/Saghen/blink.cmp
 
 Installation
 ------------
-
-Add your tag files to vim
-
-```lua
-vim.opt.tags:append({ ".git/tags", "tags" })
-```
 
 Add provider in `lazy.nvim`
 
@@ -30,7 +24,6 @@ Add provider in `lazy.nvim`
                 ctags = {
                     name = "Ctags",
                     module = "blink-cmp-ctags",
-                    fallback_for = { "lsp" },
                 },
             },
             completion = {
@@ -48,7 +41,6 @@ Add provider in `lazy.nvim`
 ctags = {
     name = "Ctags",
     module = "blink-cmp-ctags",
-    fallback_for = { "lsp" },
     opts = {
         -- List of tag files
         tag_files = vim.fn.tagfiles(),

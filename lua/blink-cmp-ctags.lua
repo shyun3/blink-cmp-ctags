@@ -1,6 +1,6 @@
 local uv = vim.loop
 local api = vim.api
-local async = require("blink.cmp.sources.lib.async")
+local async = require("blink.cmp.lib.async")
 local lsp = vim.lsp.protocol
 local debug = false
 
@@ -61,25 +61,21 @@ function ctags:_load_tags_async()
 	end, self.config.tag_files)
 
 	async.task
-		.await_all(tasks)
+		.all(tasks)
 		:map(function(results)
 			for _, res in ipairs(results) do
-				if res.status == async.STATUS.COMPLETED and res.result then
-					for ext, items_map in pairs(res.result) do
-						self.cached_items[ext] = self.cached_items[ext] or {}
-						for label, item in pairs(items_map) do
-							if self.cached_items[ext][label] then
-								merge_documentation(self.cached_items[ext][label], item)
-							else
-								self.cached_items[ext][label] = item
-							end
+				for ext, items_map in pairs(res) do
+					self.cached_items[ext] = self.cached_items[ext] or {}
+					for label, item in pairs(items_map) do
+						if self.cached_items[ext][label] then
+							merge_documentation(self.cached_items[ext][label], item)
+						else
+							self.cached_items[ext][label] = item
 						end
-						debug_print(
-							string.format("Loaded %d unique items for extension '%s'", vim.tbl_count(items_map), ext)
-						)
 					end
-				elseif res.status == async.STATUS.FAILED then
-					debug_print("Failed to load tagfile: " .. res.error)
+					debug_print(
+						string.format("Loaded %d unique items for extension '%s'", vim.tbl_count(items_map), ext)
+					)
 				end
 			end
 			self.loading = false
