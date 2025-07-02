@@ -9,7 +9,6 @@ local ctags = {}
 -- Default configuration
 local default_config = {
 	tag_files = vim.fn.tagfiles(), -- List of tag files
-	cache = true,
 	max_items = 500, -- Maximum number of completion items to return
 }
 

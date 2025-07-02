@@ -45,9 +45,6 @@ ctags = {
         -- List of tag files
         tag_files = vim.fn.tagfiles(),
 
-        -- Turn tagfile caching on or off
-        cache = true,
-
         -- Maximum number of completion items to return
         max_items = 500,
     }
