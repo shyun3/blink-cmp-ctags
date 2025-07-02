@@ -10,6 +10,19 @@ local ctags = {}
 local default_config = {
 	tag_files = vim.fn.tagfiles(), -- List of tag files
 	max_items = 500, -- Maximum number of completion items to return
+	tag_kinds_map = { -- Language specific mapping of tag kinds to LSP kinds
+		C = {
+			e = vim.lsp.protocol.CompletionItemKind.EnumMember,
+			f = vim.lsp.protocol.CompletionItemKind.Function,
+			g = vim.lsp.protocol.CompletionItemKind.Enum,
+			h = vim.lsp.protocol.CompletionItemKind.Module,
+			m = vim.lsp.protocol.CompletionItemKind.Field,
+			s = vim.lsp.protocol.CompletionItemKind.Struct,
+			t = vim.lsp.protocol.CompletionItemKind.Reference,
+			u = vim.lsp.protocol.CompletionItemKind.Class,
+			v = vim.lsp.protocol.CompletionItemKind.Variable,
+		},
+	},
 }
 
 -- Debugging Utility
@@ -34,7 +47,7 @@ end
 -- Initialize a new ctags instance
 function ctags.new(user_config)
 	local self = setmetatable({}, { __index = ctags })
-	self.config = vim.tbl_extend("force", default_config, user_config or {})
+	self.config = vim.tbl_deep_extend("force", default_config, user_config or {})
 	self.cached_items = {} -- { ['.rb'] = { ['name'] = item, ... }, ... }
 	self.loading = true
 	self:_load_tags_async()
@@ -164,9 +177,18 @@ function ctags:_parse_line(line)
 
 	local name, file, tag, kind = fields[1], fields[2], fields[3], fields[4]
 
+	local lang_prefix = "language:"
+	local lang_field = vim.tbl_filter(function(field)
+		return vim.startswith(field, lang_prefix)
+	end, fields)
+	local lang = lang_field[1] and string.sub(lang_field[1], #lang_prefix + 1)
+
+	local kinds_map = self.config.tag_kinds_map[lang] or {}
+	local lsp_kind = kinds_map[kind] or lsp.CompletionItemKind.Text
+
 	return {
 		label = name,
-		kind = lsp.CompletionItemKind.Text,
+		kind = lsp_kind,
 		insertText = name,
 		documentation = {
 			kind = "markdown",

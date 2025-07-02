@@ -47,6 +47,24 @@ ctags = {
 
         -- Maximum number of completion items to return
         max_items = 500,
+
+        -- (Optional) Language specific mapping of tag kinds to LSP kinds
+        tag_kinds_map = {
+            -- Language name according to ctags
+            -- See `ctags --list-languages`
+            C = {
+                -- For kinds, see `ctags --list-kinds-full=<language>`
+                e = vim.lsp.protocol.CompletionItemKind.EnumMember,
+                f = vim.lsp.protocol.CompletionItemKind.Function,
+                g = vim.lsp.protocol.CompletionItemKind.Enum,
+                h = vim.lsp.protocol.CompletionItemKind.Module,
+                m = vim.lsp.protocol.CompletionItemKind.Field,
+                s = vim.lsp.protocol.CompletionItemKind.Struct,
+                t = vim.lsp.protocol.CompletionItemKind.Reference,
+                u = vim.lsp.protocol.CompletionItemKind.Class,
+                v = vim.lsp.protocol.CompletionItemKind.Variable,
+            }
+        }
     }
 },
 ```
