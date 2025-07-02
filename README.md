@@ -68,3 +68,7 @@ ctags = {
     }
 },
 ```
+
+## TODO
+- [ ] Group completion results by language
+  * Currently, this is done by file extension
